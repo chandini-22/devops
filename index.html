@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Tracker</title>
+</head>
+<body>
+    <h1>Skill Tracker App</h1>
+    <form id="dataForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="skill">Skill:</label>
+        <input type="text" id="skill" required>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Data Table</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Skill</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable"></tbody>
+    </table>
+    <script>
+        document.getElementById("dataForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const skill = document.getElementById("skill").value;
+            const response = await fetch("/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, skill }),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const row = `<tr><td>${data.name}</td><td>${data.skill}</td></tr>`;
+                document.getElementById("dataTable").insertAdjacentHTML("beforeend", row);
+            }
+        });
+    </script>
+</body>
+</html>
